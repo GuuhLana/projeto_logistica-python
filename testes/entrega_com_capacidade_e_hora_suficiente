@@ -1,3 +1,12 @@
+Cenário 1: Adicionar uma entrega com capacidade e horas suficientes
+
+Neste cenário, será realizada a criação de um caminhão com uma capacidade de 100 kg e 10 horas disponíveis para operação.
+Em seguida, será criada uma entrega que possui um peso de 50 kg e um prazo de entrega definido.
+O objetivo deste teste é verificar se o sistema permite adicionar a entrega ao caminhão,
+considerando que a capacidade do caminhão é suficiente para comportar a entrega e que as horas disponíveis não serão excedidas.
+Após a adição, o teste deve confirmar que o caminhão agora contém uma entrega, calcular a capacidade restante e informar o tempo utilizado para a entrega,
+garantindo que os valores estejam corretos conforme as especificações.
+
 from models.caminhao import Caminhao
 from models.entrega import Entrega
 from models.grafo import Grafo
@@ -28,3 +37,9 @@ if __name__ == "__main__":
     print(f"Entregas no caminhão: {len(caminhao.entregas)}")
     print(f"Capacidade restante: {caminhao.capacidade_atual}")
     print(f"Horas utilizadas: {formatar_horas(caminhao.horas_utilizadas)}")
+
+Saída Esperada:
+
+Entregas no caminhão: 1
+Capacidade restante: 50
+Horas utilizadas: 0h 10m

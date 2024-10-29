@@ -1,0 +1,76 @@
+Cenário 4: Alocação de Entregas em Vários Caminhões
+
+ Neste cenário, o teste verifica a capacidade do sistema em alocar entregas em diferentes caminhões com capacidades e horas disponíveis distintas.
+ Dois caminhões são criados: o primeiro com uma capacidade de 100 kg e 10 horas disponíveis, e o segundo com 150 kg de capacidade e 8 horas disponíveis.
+ Uma lista de entregas é definida, contendo diferentes pesos e destinos.
+ O teste tenta alocar cada entrega, verificando se o sistema consegue realizar a alocação corretamente de acordo com as restrições de capacidade e horas.
+ Mensagens de sucesso ou falha devem ser exibidas conforme o resultado da tentativa de alocação.
+ A saída final deve indicar o total de entregas alocadas em cada caminhão, juntamente com a capacidade restante e as horas utilizadas.
+
+from models.caminhao import Caminhao
+from models.entrega import Entrega
+from models.grafo import Grafo
+
+def formatar_horas(horas):
+    horas_inteiras = int(horas)  # Obtém a parte inteira das horas
+    minutos = int((horas - horas_inteiras) * 60)  # Converte a parte decimal em minutos
+    return f"{horas_inteiras}h {minutos}m"  # Formata a saída
+
+if __name__ == "__main__":
+    grafo = Grafo()
+    grafo.adicionar_centro("Centro de Distribuição", "Belém", 90, 5)
+    grafo.adicionar_centro("Centro de Distribuição", "Recife", 20, 10)
+    grafo.adicionar_centro("Centro de Distribuição", "São Paulo", 80, 10)
+    grafo.adicionar_centro("Centro de Distribuição", "Curitiba", 10, 10)
+    grafo.adicionar_centro("Centro de Distribuição", "Natal", 200, 900)
+
+    caminhao1 = Caminhao(capacidade=100, horas_disponiveis=10)
+    caminhao2 = Caminhao(capacidade=150, horas_disponiveis=8)
+
+    entregas = [
+        Entrega(destino="Belém", prazo="2024-12-31", peso=40),  # Deve ser alocada no caminhão 1
+        Entrega(destino="Recife", prazo="2024-12-31", peso=50),  # Deve ser alocada no caminhão 1
+        Entrega(destino="São Paulo", prazo="2024-12-31", peso=70),  # Deve falhar (caminhão 1) e ser alocada no caminhão 2
+        Entrega(destino="Curitiba", prazo="2024-12-31", peso=30),   # Deve ser alocada no caminhão 2
+        Entrega(destino="Natal", prazo="2024-12-31", peso=51)  # Deve falhar (caminhão 2)
+    ]
+
+    for entrega in entregas:
+        entrega.calcular_tempo_estimado(grafo, "Centro de Distribuição")
+        try:
+            if entrega.peso <= caminhao1.capacidade_atual and entrega.tempo_estimado <= caminhao1.horas_disponiveis:
+                caminhao1.adicionar_entrega(entrega)
+                print(f"Entrega para {entrega.destino} adicionada com sucesso no caminhão 1.")
+            elif entrega.peso <= caminhao2.capacidade_atual and entrega.tempo_estimado <= caminhao2.horas_disponiveis:
+                caminhao2.adicionar_entrega(entrega)
+                print(f"Entrega para {entrega.destino} adicionada com sucesso no caminhão 2.")
+            else:
+                raise ValueError("Capacidade ou horas insuficientes para a entrega.")
+        except ValueError as e:
+            print(f"Erro ao adicionar entrega para {entrega.destino}: {e}")
+
+    # Saída dos resultados finais
+    print(f"Total de entregas no caminhão 1: {len(caminhao1.entregas)}")
+    print(f"Capacidade restante no caminhão 1: {caminhao1.capacidade_atual}")
+    print(f"Horas utilizadas no caminhão 1: {formatar_horas(caminhao1.horas_utilizadas)}")
+
+    print(f"Total de entregas no caminhão 2: {len(caminhao2.entregas)}")
+    print(f"Capacidade restante no caminhão 2: {caminhao2.capacidade_atual}")
+    print(f"Horas utilizadas no caminhão 2: {formatar_horas(caminhao2.horas_utilizadas)}")
+
+Saídas Esperadas:
+
+Entrega para Belém adicionada com sucesso no caminhão 1.
+Entrega para Recife adicionada com sucesso no caminhão 1.
+
+Entrega para São Paulo adicionada com sucesso no caminhão 2.
+Entrega para Curitiba adicionada com sucesso no caminhão 2.
+Erro ao adicionar entrega para Natal: Capacidade ou horas insuficientes para a entrega.
+
+Total de entregas no caminhão 1: 2
+Capacidade restante no caminhão 1: 10
+Horas utilizadas no caminhão 1: 1h 49m
+
+Total de entregas no caminhão 2: 2
+Capacidade restante no caminhão 2: 50
+Horas utilizadas no caminhão 2: 1h 30m

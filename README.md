@@ -33,3 +33,10 @@ Uma empresa de logística possui quatro centros de distribuição em **Belém (P
 - Testar diferentes cenários variando o número de entregas, caminhões e distâncias.
 - Avaliar o tempo de execução e a eficiência das estruturas de dados.
 - Comparar o desempenho com diferentes estruturas, como lista de adjacência vs. matriz
+
+### Testes
+Na pasta testes são encontrados alguns testes que podem ser reproduzidos ao substituir o conteúdo do arquivo main.py pelos seus respectivos códigos.
+Os cenarios são:
+- Alta Demanda com Poucos Caminhões
+- Sobrecarga de Capacidade
+- Entregas Urgentes com Prazos Apertados

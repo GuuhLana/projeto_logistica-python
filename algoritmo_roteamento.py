@@ -23,11 +23,6 @@ def encontrar_centro_mais_proximo(grafo, centros_distribuicao, destino):
 def alocar_caminhoes(entregas, caminhoes, grafo, centros_distribuicao):
     """
     Aloca caminhões para entregas com base na proximidade dos centros de distribuição e na capacidade dos caminhões.
-    :param entregas: Lista de objetos Entrega.
-    :param caminhoes: Lista de objetos Caminhao.
-    :param grafo: Objeto da classe Grafo.
-    :param centros_distribuicao: Lista de centros de distribuição.
-    :return: Dicionário com caminhões como chaves e centros de distribuição como valores.
     """
     alocacao = {}
 
@@ -38,10 +33,12 @@ def alocar_caminhoes(entregas, caminhoes, grafo, centros_distribuicao):
             print(f"Não há caminho para a entrega {entrega.destino} a partir dos centros de distribuição.")
             continue
 
-        # Procura o caminhão que possa realizar a entrega respeitando as restrições
+        # Calcula o tempo estimado antes de tentar alocar
+        entrega.calcular_tempo_estimado(grafo, centro_mais_proximo)
+
         caminhão_alocado = None
         for caminhao in caminhoes:
-            if caminhao.pode_realizar_entrega(entrega, grafo, centro_mais_proximo):
+            if caminhao.pode_realizar_entrega(entrega):
                 caminhão_alocado = caminhao
                 caminhao.adicionar_entrega(entrega)
                 break
@@ -49,7 +46,7 @@ def alocar_caminhoes(entregas, caminhoes, grafo, centros_distribuicao):
         if caminhão_alocado:
             alocacao[caminhão_alocado] = centro_mais_proximo
         else:
-            print(f"Não há caminhão disponível para a entrega {entrega.destino}.")
+            print(f"A entrega para {entrega.destino} com peso {entrega.peso} kg não pode ser alocada devido à sobrecarga de capacidade.")
 
     return alocacao
 

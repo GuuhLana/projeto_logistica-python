@@ -1,0 +1,38 @@
+Cenário 3: Tentar Adicionar uma Entrega com Peso Excedente
+
+Neste cenário, o teste avalia o comportamento do sistema ao tentar adicionar uma entrega cujo peso excede a capacidade máxima do caminhão.
+Um caminhão é configurado com uma capacidade de 100 kg e 10 horas disponíveis. Em seguida, será criada uma entrega que pesa 120 kg, o que é superior à capacidade do caminhão.
+A função adicionar_entrega será chamada para tentar incluir essa entrega, e o teste irá verificar se o sistema gera a exceção apropriada devido ao peso excedente.
+O resultado esperado é que a saída indique um erro informando que a capacidade ou as horas disponíveis são insuficientes para a entrega.
+
+from models.caminhao import Caminhao
+from models.entrega import Entrega
+from models.grafo import Grafo
+
+
+if __name__ == "__main__":
+    grafo = Grafo()
+
+    grafo.adicionar_centro("Belém", "Cidade B", 200, 5)
+    grafo.adicionar_centro("Recife", "Cidade B", 400, 10)
+    grafo.adicionar_centro("São Paulo", "Cidade B", 60, 15)
+    grafo.adicionar_centro("Curitiba", "Cidade B", 100, 9)
+
+    caminhao = Caminhao(capacidade=100, horas_disponiveis=10)
+
+    entrega_excedente = Entrega(destino="Cidade B", prazo="2024-12-31", peso=120)
+    entrega_excedente.calcular_tempo_estimado(grafo, "Belém")
+
+    try:
+        caminhao.adicionar_entrega(entrega_excedente)
+        print("Entrega adicionada com sucesso!")
+    except ValueError as e:
+        print(f"Erro: {e}")
+
+Saída Esperada:
+
+Caso de Falha: Se a entrega não puder ser adicionada (peso excedente), a saída será:
+Erro: Capacidade ou horas insuficientes para a entrega
+
+Caso de Sucesso: Se a entrega fosse válida (por exemplo, se o peso fosse menor ou igual a 100 kg), a saída seria:
+Entrega adicionada com sucesso!

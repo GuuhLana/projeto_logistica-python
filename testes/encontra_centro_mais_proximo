@@ -1,0 +1,36 @@
+Cenário 2: Encontrar Centro de Distribuição mais próximo
+
+Neste cenário, o objetivo é testar a funcionalidade que identifica o centro de distribuição mais próximo de um determinado destino.
+isso, será criado um grafo que representa diferentes centros de distribuição, com suas respectivas distâncias e tempos de operação.
+A partir de uma lista de centros e um destino específico, a função encontrar_centro_mais_proximo será invocada para determinar qual centro está mais próximo do destino.
+O teste verificará se a função retorna corretamente o centro mais próximo e se o sistema lida adequadamente com a situação em que nenhum centro é encontrado.
+O resultado esperado é que a saída indique o centro de distribuição mais próximo ou informe que não há centros disponíveis para o destino.
+
+from models.grafo import Grafo
+from algoritmo_roteamento import encontrar_centro_mais_proximo
+
+if __name__ == "__main__":
+    grafo = Grafo()
+
+    grafo.adicionar_centro("Belém", "Cidade B", 200, 5)
+    grafo.adicionar_centro("Recife", "Cidade B", 400, 10)
+    grafo.adicionar_centro("São Paulo", "Cidade B", 60, 15)
+    grafo.adicionar_centro("Curitiba", "Cidade B", 100, 9)
+
+    centros = ["Belém", "Recife", "São Paulo","Curitiba"]
+    destino = "Cidade B"
+
+    centro_mais_proximo = encontrar_centro_mais_proximo(grafo, centros, destino)
+
+    if centro_mais_proximo:
+        print(f"Centro de distribuição mais próximo para {destino}: {centro_mais_proximo}")
+    else:
+        print(f"Nenhum centro de distribuição encontrado para {destino}.")
+
+Saída Esperada:
+
+Caso de Sucesso: Se o centro de distribuição mais próximo for encontrado corretamente, a saída será:
+Centro de distribuição mais próximo para Cidade B: São Paulo
+
+Caso de Falha: Se, por algum motivo, nenhum centro de distribuição for encontrado (por exemplo, se todos os centros estivessem desconectados do destino), a saída seria:
+Nenhum centro de distribuição encontrado para Cidade B.

@@ -1,5 +1,3 @@
-# Arquivo: models/entrega.py
-
 from datetime import datetime
 
 class Entrega:
@@ -15,3 +13,4 @@ class Entrega:
         """
         distancia = grafo.calcular_distancia(centro, self.destino)
         self.tempo_estimado = distancia / 60  # Exemplo: 1 km leva 1 minuto
+        return self.tempo_estimado
