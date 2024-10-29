@@ -4,32 +4,38 @@ from models.entrega import Entrega
 from models.grafo import Grafo
 
 def main():
+    # Definindo centros de distribuição e destinos
     centros_distribuicao = ['Belem', 'Recife', 'Sao Paulo', 'Curitiba']
     destinos = ['Fortaleza', 'Brasilia', 'Rio de Janeiro', 'Porto Alegre']
 
+    # Inicializando o grafo e adicionando as rotas entre centros e destinos
     grafo = Grafo()
     grafo.adicionar_centro('Belem', 'Fortaleza', 1614, 1000)
     grafo.adicionar_centro('Recife', 'Brasilia', 2100, 1500)
     grafo.adicionar_centro('Sao Paulo', 'Rio de Janeiro', 429, 300)
     grafo.adicionar_centro('Curitiba', 'Porto Alegre', 711, 500)
 
+    # Criando entregas com destino e prazo, peso
     entrega1 = Entrega(destino='Fortaleza', prazo='2024-09-20', peso=2.5)
     entrega2 = Entrega(destino='Brasilia', prazo='2024-09-22', peso=3.0)
     entrega3 = Entrega(destino='Rio de Janeiro', prazo='2024-09-23', peso=1.2)
     entrega4 = Entrega(destino='Porto Alegre', prazo='2024-09-24', peso=4.0)
     entregas = [entrega1, entrega2, entrega3, entrega4]
 
+    # Criando caminhões com capacidade e horas disponíveis
     caminhao1 = Caminhao(capacidade=5, horas_disponiveis=8)
     caminhao2 = Caminhao(capacidade=8, horas_disponiveis=10)
     caminhoes = [caminhao1, caminhao2]
 
+    # Alocando caminhões para entregas
     alocacao = alocar_caminhoes(entregas, caminhoes, grafo, centros_distribuicao)
 
+    # Exibindo a alocação dos caminhões e a distância total percorrida
     for caminhao, centro in alocacao.items():
         distancia_total = calcular_distancia_total(caminhao, grafo, centro)
-        print(f"Caminhão alocado ao centro {centro} percorreu {distancia_total} km com as seguintes entregas:")
+        print(f"\nCaminhão alocado ao centro {centro} percorreu {distancia_total:.2f} km com as seguintes entregas:")
         for entrega in caminhao.entregas:
-            print(f"- {entrega.destino}, Peso: {entrega.peso}, Prazo: {entrega.prazo}")
+            print(f"- Destino: {entrega.destino}, Peso: {entrega.peso} kg, Prazo: {entrega.prazo.strftime('%Y-%m-%d')}")
 
 if __name__ == "__main__":
     main()

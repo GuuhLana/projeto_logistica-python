@@ -2,17 +2,17 @@ import networkx as nx
 
 def encontrar_centro_mais_proximo(grafo, centros_distribuicao, destino):
     """
-    Encontra o centro de distribuição mais próximo do destino.
+    Encontra o centro de distribuição mais próximo do destino considerando a conectividade de rota.
     :param grafo: Objeto da classe Grafo.
     :param centros_distribuicao: Lista de centros de distribuição.
     :param destino: String, nome da cidade de destino.
-    :return: String, nome do centro de distribuição mais próximo.
+    :return: String, nome do centro de distribuição mais próximo ou None se não houver caminho.
     """
     menor_distancia = float('inf')
     centro_mais_proximo = None
 
     for centro in centros_distribuicao:
-        if nx.has_path(grafo.grafo, centro, destino):
+        if nx.has_path(grafo.grafo, centro, destino):  # Confirma se existe um caminho
             distancia = grafo.calcular_distancia(centro, destino)
             if distancia < menor_distancia:
                 menor_distancia = distancia
@@ -22,7 +22,7 @@ def encontrar_centro_mais_proximo(grafo, centros_distribuicao, destino):
 
 def alocar_caminhoes(entregas, caminhoes, grafo, centros_distribuicao):
     """
-    Aloca caminhões para as entregas com base na proximidade dos centros de distribuição e capacidade dos caminhões.
+    Aloca caminhões para entregas com base na proximidade dos centros de distribuição e na capacidade dos caminhões.
     :param entregas: Lista de objetos Entrega.
     :param caminhoes: Lista de objetos Caminhao.
     :param grafo: Objeto da classe Grafo.
@@ -38,6 +38,7 @@ def alocar_caminhoes(entregas, caminhoes, grafo, centros_distribuicao):
             print(f"Não há caminho para a entrega {entrega.destino} a partir dos centros de distribuição.")
             continue
 
+        # Procura o caminhão que possa realizar a entrega respeitando as restrições
         caminhão_alocado = None
         for caminhao in caminhoes:
             if caminhao.pode_realizar_entrega(entrega, grafo, centro_mais_proximo):
